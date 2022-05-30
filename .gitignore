@@ -1,6 +1,6 @@
 *
-!compiler-blog
-!compiler-blog/*.md
+!docs
+!docs/*.md
 
 !README
 !.gitignore
