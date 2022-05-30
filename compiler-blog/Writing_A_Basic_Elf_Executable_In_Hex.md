@@ -1,4 +1,6 @@
-## Building our elf binary
+# Building an ELF executable from scratch
+
+## The ELF header layout
 An ELF file begins with a few magic bytes and data structures that instruct the operating system on how to load and run the executable.
 A basic C representation of this would be:
 ```c
@@ -32,7 +34,9 @@ struct ELFHeader {
   uint16_t section_header_table_section_names_index;
 }
 ```
-### The Elf Identifier
+Don't worry if some of these fields seem confusing, they will be explained as we add them to the executable.
+
+### Building our ELF header
 We begin by defining the four byte "Magic Number" that specifies that this is an ELF executable. This is the byte `0x7F` followed by the
 ASCII representation of "ELF"
 ```bash
@@ -103,3 +107,42 @@ We now need bytes representing the sizes and numbers of the various ELF header e
 0x00 0x00 # The number of section header entries (We aren't using any sections)
 0x00 0x00 # The index of the section header names entry (null, since we aren't using it)
 ```
+
+We now have a complete ELF header which should be parsable by the `file` command on linux, or `readelf` with
+the `-h` flag which tells it to display the ELF header of the file. It should correctly show the data, although
+`readelf` will output an error since we told it that we have a program header entry and didn't actually provide
+one. 
+
+Here is an example of what the output of `readelf -h` will be for the program:
+```
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              EXEC (Executable file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x400078
+  Start of program headers:          64 (bytes into file)
+  Start of section headers:          0 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           56 (bytes)
+  Number of program headers:         1
+  Size of section headers:           0 (bytes)
+  Number of section headers:         0
+  Section header string table index: 0
+```
+You can see that most of the data that we programmed into the header is very nicely rendered here. You can even mess
+with the values of some of the fields and see how that changes the output.
+
+The end of `readelf`'s output will be an error message telling you that it tried to read
+the program headers but it got the end of the file instead which we are expecting.
+```txt
+readelf: Error: Reading 56 bytes extends past end of file for program headers
+```
+
+That's it for this post. In the next post we will build the program header entry and actually get our basic executable to run.
