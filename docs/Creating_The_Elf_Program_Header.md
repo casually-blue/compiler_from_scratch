@@ -72,3 +72,6 @@ For our simple program we don't care about the alignment of the segment in bytes
 We now have all the data needed for our basic elf header and `readelf -h` should now not return any errors when we run it on
 our ELF file. However, there is no actual code in the executable so attempting to run it now will just cause a segmentation 
 fault.
+
+We can now also call `readelf -l` to 
+
