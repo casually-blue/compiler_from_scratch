@@ -65,7 +65,7 @@ We follow this by four bytes representing another copy of the current version of
 0x01 0x00 0x00 0x00 # the same as previously only this time with extra bytes
 ```
 The ELF version number is followed by three pointers, these go to:
-1. The entry point of the function (Since we aren't doing anything fancy this will by right after the program header table)
+1. The entry point of the function (Since we aren't doing anything fancy this will be right after the program header table)
 2. The start of the program header table (Immediately following the ELF header)
 3. The Section Header Table (We won't be using any special sections so for our program this will be empty)
 At the moment we know two of these. The first is the offset to the start of the program header table (`0x40` followed by 
