@@ -1,11 +1,13 @@
 *
+!README.md
+
 !docs
 !docs/*.md
 
-!README
 !.gitignore
 
 !bcompiler
+!bcompiler/README
 !bcompiler/bootstrap
 !bcompiler/*.he
 !bcompiler/*.bc
