@@ -1,3 +1,8 @@
+---
+layout: post
+title: Writing the Program Header entry
+---
+
 # Writing the Program Header Entry
 We start the program header right after the ELF header in our test binary.
 In most ELF files there are multiple program header table entries, but since

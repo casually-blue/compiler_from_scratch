@@ -1,3 +1,8 @@
+---
+layout: post
+title: Writing an ELF executable from scratch 
+---
+
 # Building an ELF executable from scratch
 
 ## The ELF header layout
