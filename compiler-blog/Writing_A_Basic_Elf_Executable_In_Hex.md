@@ -50,7 +50,7 @@ padding which should be filled with zeroes. Since we will be targeting 64 Bit Li
 
 ```bash
 0x02 # 64 Bit Executable (0x01 represents 32 Bit)
-0x01 # Little Endian (any Intel or AMD x86_64 processor will always be little endian
+0x01 # Little Endian (any Intel or AMD x86_64 processor will always be little endian)
 0x01 # This is the current version of ELF
 0x00 # System V UNIX ABI (There are a few valid values of this which aren't reproduced here) 
 0x00 # Ignored ABI Version Specifier on Linux
