@@ -2,7 +2,9 @@
 !README.md
 
 !docs
-!docs/*.md
+!docs/index.md
+!docs/_posts/*.md
+!docs/_posts/_drafts/*.md
 
 !.gitignore
 
