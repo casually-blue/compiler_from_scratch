@@ -98,7 +98,7 @@ We now need bytes representing the sizes and numbers of the various ELF header e
 ```bash
 0x40 0x00 # The ELF Header Size (64 bytes)
 0x38 0x00 # The size of a program header entry (56 bytes)
-0x01 0x00 # The number of program header entries (We only have one)
+0x01 0x00 # The number of program header entries (We will only have one)
 0x00 0x00 # The size of a section header entry (0 bytes since we aren't using it)
 0x00 0x00 # The number of section header entries (We aren't using any sections)
 0x00 0x00 # The index of the section header names entry (null, since we aren't using it)
