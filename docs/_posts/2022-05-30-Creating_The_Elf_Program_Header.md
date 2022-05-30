@@ -77,5 +77,18 @@ We now have all the data needed for our basic elf header and `readelf -h` should
 our ELF file. However, there is no actual code in the executable so attempting to run it now will just cause a segmentation 
 fault.
 
-We can now also call `readelf -l` to 
+We can now also call `readelf -l` to view the program header information:
+```txt
+Elf file type is EXEC (Executable file)
+Entry point 0x400078
+There is 1 program header, starting at offset 64
+
+Program Headers:
+  Type           Offset             VirtAddr           PhysAddr
+                 FileSiz            MemSiz              Flags  Align
+  LOAD           0x0000000000000000 0x0000000000400000 0x0000000000000000
+                 0x000000000000ffff 0x000000000000ffff  R E    0x0
+```
+
+That's it for this post. In the next post we will add our first actual executable code.
 
