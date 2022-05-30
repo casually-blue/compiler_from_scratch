@@ -1,12 +1,8 @@
 ---
-layout: default
+layout: default 
 title: Writing a compiler from scratch
 ---
-
-<ul>
-  {% for post in site.posts %}
-    <li>
-      <a href="{{ post.url }}">{{ post.title }}</a>
-    </li>
-  {% endfor %}
-</ul>
+# {{ page.title }}
+{% for post in site.posts reversed %}
+  1. [{{ post.title }}]({{ post.url}})
+{% endfor %}
