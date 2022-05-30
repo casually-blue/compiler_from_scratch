@@ -3,8 +3,10 @@
 
 !docs
 !docs/index.md
+!docs/_posts
 !docs/_posts/*.md
-!docs/_posts/_drafts/*.md
+!docs/_drafts
+!docs/_drafts/*.md
 
 !.gitignore
 
