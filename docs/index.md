@@ -1,6 +1,7 @@
-layout: page 
+---
+layout: default
 title: Writing a compiler from scratch
---------------------------------------
+---
 
 <ul>
   {% for post in site.posts %}
