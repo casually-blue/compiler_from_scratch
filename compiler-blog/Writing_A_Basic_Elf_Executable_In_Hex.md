@@ -86,11 +86,11 @@ Program header and the ELF header and then offsetting that by the location that 
 |Total          |             120 |
 
 The total size of the two headers is 120 bytes, which means that the offset is `0x78`. We now need to pick a location to load
-our program at. The default location for GNU ld to link a program's code section at is `0x00 0x00 0x40 0x00 0x00 0x00 0x00 0x00`
-so we add our `0x78` offset to that to get `0x78 0x00 0x40 0x00 0x00 0x00 0x00 0x00` as our entry point address.
+our program at. The default location for GNU ld to link a program's code section at is `0x400000`
+so we add our `0x78` offset to that to get `0x400078` as our entry point address.
 We can now write the next portion of our header starting with that entry point.
 ```bash
-0x78 0x00 0x40 0x00 0x00 0x00 0x00 0x00 # Entry point address 
+0x78 0x00 0x40 0x00 0x00 0x00 0x00 0x00 # Entry point address (In little endian encoding and extended to the 64 bits)
 0x40 0x00 0x00 0x00 0x00 0x00 0x00 0x00 # Program header offset
 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 # The section header table offset (We aren't using this so it is null)
 ```
