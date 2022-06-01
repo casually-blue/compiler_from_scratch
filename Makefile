@@ -1,6 +1,9 @@
-all: elf_test
+all: setup elf_bin 
 
-elf_test: obj/elf_header obj/elf_program_header obj/elf_code
+serve: setup
+	cd docs && jekyll serve --baseurl ""
+
+elf_bin: obj/elf_header obj/elf_program_header obj/elf_code
 	cat $^ > $@
 	chmod +x $@
 
@@ -34,6 +37,10 @@ clean:
 obj:
 	mkdir -p $@
 
-setup:
+.PHONY: setup
+setup: .setup
+
+.setup:
 	sudo npm install -g codedown
 	sudo gem install jekyll
+	touch .setup
