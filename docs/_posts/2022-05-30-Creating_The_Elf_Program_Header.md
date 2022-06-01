@@ -7,7 +7,7 @@ We start the program header right after the ELF header in our test binary.
 In most ELF files there are multiple program header table entries, but since
 we are just wanting to run some binary code we are just creating one. 
 Here is an example of the basic C layout for the program header table:
-```c
+```cpp
 struct ELFProgramHeaderEntry {
   uint32_t segment_type; 
   uint32_t segment_permission_flags;
@@ -36,9 +36,9 @@ permission giving us a permission value of `0x05`.
 
 Both of these fields are represented in the header as four bytes.
 
-```bash
-0x01 0x00 0x00 0x00 # Loadable Segment Type
-0x05 0x00 0x00 0x00 # Read+Execute permission
+```c
+0x01 0x00 0x00 0x00 // Loadable Segment Type
+0x05 0x00 0x00 0x00 // Read+Execute permission
 ```
 
 ## Segment location
@@ -49,10 +49,10 @@ We decided in the last post to load the executable at `0x400000` since that is t
 that Linux binaries get loaded at. We will use this value for the virtual address
 of the binary. The physical address is not important for a linux binary, so we fill it in with `0x0`.
 
-```bash
-0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 # Offset in the file to load into this segment
-0x00 0x00 0x40 0x00 0x00 0x00 0x00 0x00 # Virtual memory address of the start of this segment
-0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 # Phyical memory address of the start of this segment (ignored)
+```c
+0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 // Offset in the file to load into this segment
+0x00 0x00 0x40 0x00 0x00 0x00 0x00 0x00 // Virtual memory address of the start of this segment
+0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 // Phyical memory address of the start of this segment (ignored)
 ```
 
 ## Segment size
@@ -62,15 +62,15 @@ the code in our executable, plus the length of the headers. To be extra safe we 
 This will probably be more than our first couple executables, but we may want to revisit it in the future and 
 keep its value up to date with the size of our program.
 
-```bash
-0xFF 0xFF 0x00 0x00 0x00 0x00 0x00 0x00 # Amount of data to read from the ELF file
-0xFF 0xFF 0x00 0x00 0x00 0x00 0x00 0x00 # Amound of data to load into memory
+```c
+0xFF 0xFF 0x00 0x00 0x00 0x00 0x00 0x00 // Amount of data to read from the ELF file
+0xFF 0xFF 0x00 0x00 0x00 0x00 0x00 0x00 // Amound of data to load into memory
 ```
 
 ## Segment alignment
 For our simple program we don't care about the alignment of the segment in bytes so we can just put `0x00` as its value.
-```bash
-0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 # Alignment of the segment
+```c
+0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 // Alignment of the segment
 ```
 
 We now have all the data needed for our basic elf header and `readelf -h` should now not return any errors when we run it on
