@@ -16,3 +16,6 @@
 !bcompiler/bootstrap
 !bcompiler/*.he
 !bcompiler/*.bc
+
+!hex
+!hex/*
