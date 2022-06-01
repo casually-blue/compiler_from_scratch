@@ -8,6 +8,7 @@ elf_bin: obj/elf_header obj/elf_program_header obj/elf_code
 	chmod +x $@
 
 obj/elf_code: obj
+	# Basic return 23 code
 	echo "b801 0000 00bb 1700 0000 cd80" | xxd -r -p - $@
 
 obj/elf_header: docs/_posts/2022-05-29-Writing_A_Basic_Elf_Executable_From_Scratch.md obj
