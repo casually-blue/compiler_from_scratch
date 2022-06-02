@@ -30,7 +30,8 @@ int 0x80 ; Execute the 0x80 processor interrupt
 
 Our next step is converting this assembly code into machine code. We could run it through an assembler and get 
 the code, but we're trying to write a compiler from scratch so instead we'll manually encode these instructions 
-into hex.
+into hex. Make sure you make a copy of your elf header because you won't want to mess it up and we'll write several
+different programs that you may want to keep around.
 
 We first want to `mov` the immediate value `1` into the eax register so we need to open up the [Intel software
 developers manual](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html) and look
@@ -91,3 +92,61 @@ interrupt number, giving us
 We can now put this code right after our elf header giving us a working binary that immediately returns zero.
 If we want, we can change the value we put in `ebx` to give us a different return value encoded as 
 a 32 bit little endian value.
+
+## Hello World!
+Now that we can return a value its finally time to print "Hello World!" from machine code. Its going to be a
+bit more complicated but its still a fairly simple program. Like before, we'll start with an assembly language
+program and hand assemble it into machine code. This time we'll be using the `write` syscall in addition to the
+exit syscall to end our program. Here's the basic assembly:
+```nasm
+mov eax, 4 ; 4 is the number of the write syscall
+mov ebx, 0 ; We want to write bytes to file descriptor 0 (Also known as standard output)
+mov ecx, hello_world ; We want to load the address of the string to print
+mov edx, 12 ; The number of bytes we want to print from the string
+int 0x80 ; Execute syscall
+
+mov eax, 1 ; Exit syscall
+mov ebx, 0 ; return 0
+int 0x80 ; Execute syscall
+
+hello: db "Hello World!", 0x0A ; Hello world + newline
+```
+
+This is a few more instructions than the previous program, but they're all instructions that we already know how 
+to assemble so the only thing we need to do is calculate the address of the string and put it in as an immediate 
+value in ecx. We basically need to calculate how many bytes after the start of the code the bytes of the string 
+will get stored and then write that value into ecx.
+
+If we look at each `mov` instruction with immediate they take up five bytes, and there's six of them, giving us `30`
+bytes, or an offset of `0x1D`, the two interrupt calls each take up two bytes, which gives us four bytes, for a final
+offset of `0x22`. We now add that offset to the address of the code start (`0x7800400000000000`). Since the upper half
+of the number is all zeros we can truncate the value to 32 bits since they will get cleared anyway when we load the 
+register. Adding the offset to the address, we get `0x9A004000` which we load into ecx. Heres what the binary code will
+look like
+
+```c
+// Print Hello World
+0xB8 // mov eax,
+0x04 0x00 0x00 0x00 // 4 (write syscall)
+0xBB // mov ebx,
+0x00 0x00 0x00 0x00 // 0 (file descriptor of stdin)
+0xB9 // mov ecx,
+0x9A 0x00 0x40 0x00 // Address of string in memory
+0xba // mov edx,
+0x0D 0x00 0x00 0x00 // number of bytes to write
+0xC8 0x80 // Execute syscall
+
+// Exit Program
+0xB8 // mov eax,
+0x01 0x00 0x00 0x00 // 1 (exit syscall)
+0xBB // mov ebx,
+0x00 0x00 0x00 0x00 // return 0
+0xC8 0x80 // execute syscall
+
+0x48 0x65 0x6C 0x6C 0x6F 0x20 0x57 0x6F 0x72 0x6C 0x64 0x21 0x0A // ascii characters for hello world as hex
+```
+
+Now that we have a working hello world, our next step will be to implement a simple program to read hexidecimal 
+characters from the input and write them to the output as bytes. This will make writing machine code easier as 
+we will no longer have to use a hex editor to write code into a file. That's all for this post though, we'll start
+the implementation of our hex writer in the next post.
