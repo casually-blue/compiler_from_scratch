@@ -19,3 +19,7 @@
 
 !hex
 !hex/*
+
+!csrc
+!csrc/*.c
+!csrc/*.h
