@@ -1,7 +1,7 @@
 ELF_CODE = $(wildcard hex/elf_code_*)
 ELF_BINS = $(patsubst hex/elf_code_%, bin/elf_bin_%, $(ELF_CODE))
 
-all: setup $(ELF_BINS)
+all: setup $(ELF_BINS) bin/hex_c
 
 serve: setup
 	cd docs && jekyll serve --baseurl "" -D
@@ -20,9 +20,13 @@ bin/elf_bin_%: obj/elf_header obj/elf_program_header obj/elf_code_%
 	cat $^ > $@
 	chmod +x $@
 
+bin/hex_c: csrc/hex.c
+	gcc -o $@ -g $^
+
 clean:
 	rm -rf obj
 	rm -f elf_test
+	rm -f bin/*
 
 obj:
 	mkdir -p $@
