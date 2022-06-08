@@ -22,12 +22,12 @@ char get_hex_digit() {
 	char c = 0; 
 	do {
 		c = get_next_char();
-		if(c == 255 || (c = as_hex(c)) != 255) {
-			return c;
-		} else if(c == '#') {
+		if(c == '#') {
 			do {
 				c = get_next_char();
 			} while (c != 255 && c != '\n');
+		} else if(c == 255 || (c = as_hex(c)) != 255) {
+			return c;
 		}
 	} while(1);
 }
