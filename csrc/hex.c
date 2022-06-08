@@ -1,6 +1,3 @@
-#include<stdint.h>
-#include<stdio.h>
-
 unsigned char as_hex(c) {
 	if(c >= '0' && c <= '9') {
 		return c - '0';
