@@ -23,6 +23,10 @@ bin/elf_bin_%: obj/elf_header obj/elf_program_header obj/elf_code_%
 bin/hex_c: csrc/hex.c
 	gcc -o $@ -g $^
 
+bin/hex_asm: asm/hex.asm
+	nasm -f elf64 $^
+	gcc $^ -o $@ -no-pie
+
 clean:
 	rm -rf obj
 	rm -f elf_test

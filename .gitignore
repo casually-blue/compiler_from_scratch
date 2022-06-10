@@ -23,3 +23,6 @@
 !csrc
 !csrc/*.c
 !csrc/*.h
+
+!asm
+!asm/*.asm
