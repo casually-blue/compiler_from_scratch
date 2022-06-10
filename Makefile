@@ -1,20 +1,20 @@
 ELF_CODE = $(wildcard hex/elf_code_*)
 ELF_BINS = $(patsubst hex/elf_code_%, bin/elf_bin_%, $(ELF_CODE))
 
-all: setup $(ELF_BINS) bin/hex_c
+all: setup bin/hex_c bin/hex_asm $(ELF_BINS)
 
 serve: setup
 	cd docs && jekyll serve --baseurl "" -D
 
 .PRECIOUS: obj/elf_code_%
 obj/elf_code_%: hex/elf_code_% obj
-	cat $< | xxd -r -p - $@
+	cat $< | bin/hex_asm > $@
 
 obj/elf_header: hex/elf_header obj
-	cat $< | xxd -r -p - $@
+	cat $< | bin/hex_asm > $@ $@
 
 obj/elf_program_header: hex/elf_program_header obj
-	cat $< | xxd -r -p - $@
+	cat $< | bin/hex_asm > $@
 
 bin/elf_bin_%: obj/elf_header obj/elf_program_header obj/elf_code_%
 	cat $^ > $@
@@ -25,7 +25,7 @@ bin/hex_c: csrc/hex.c
 
 bin/hex_asm: asm/hex.asm
 	nasm -f elf64 $^
-	gcc $^ -o $@ -no-pie
+	gcc asm/hex.o -o $@ -no-pie
 
 clean:
 	rm -rf obj

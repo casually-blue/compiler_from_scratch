@@ -8,7 +8,7 @@ unsigned char as_hex(c) {
 }
 
 char get_next_char() {
-	char c = 255;
+	unsigned char c = 255;
 	if(!read(0, &c, 1)) {
 		return 255;
 	}
@@ -16,7 +16,7 @@ char get_next_char() {
 }
 
 char get_hex_digit() {
-	char c = 0; 
+	unsigned char c = 0; 
 	do {
 		c = get_next_char();
 		if(c == '#') {
