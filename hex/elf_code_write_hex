@@ -1,108 +1,108 @@
-eb 04 # jmp main (+6)
+eb 04                         # jmp main (+6)
 00 00 00 00
 
 # main +42
-e8 51 00 00 00 # call get_hex_digit
-50 # push rax
-e8 4b 00 00 00 # call get_hex_digit
-5b # pop rbx
+e8 51 00 00 00                # call get_hex_digit
+50                            # push rax
+e8 4b 00 00 00                # call get_hex_digit
+5b                            # pop rbx
 
-80 fb ff # cmp bl, 255
-74 19 # je exit
-c1 e3 04 # shl eax, 4
-3c ff # cmp al, 255
-75 09 # jne .lower_half
-89 d8 # mov eax, ebx
-e8 17 00 00 00 # call write_byte
-eb 09 # jmp exit
+80 fb ff                      # cmp bl, 255
+74 19                         # je exit
+c1 e3 04                      # shl eax, 4
+3c ff                         # cmp al, 255
+75 09                         # jne .lower_half
+89 d8                         # mov eax, ebx
+e8 17 00 00 00                # call write_byte
+eb 09                         # jmp exit
 # .lower_half
-09 d8 # or eax, ebx
-e8 0e 00 00 00 # call write_byte
-eb d6 # jmp main
+09 d8                         # or eax, ebx
+e8 0e 00 00 00                # call write_byte
+eb d6                         # jmp main
 
 # exit +12
-b8 3c 00 00 00 # mov rax, 60
-bf 00 00 00 00 # mov rdi, 0
-0f 05 # syscall
+b8 3c 00 00 00                # mov rax, 60
+bf 00 00 00 00                # mov rdi, 0
+0f 05                         # syscall
 
 # write_byte + 33
-50 # push rax
-b8 01 00 00 00 # mov eax, 1
-bf 01 00 00 00 # mov edi, 1
-be 79 00 40 00 # mov esi, rw_buffer
-ba 01 00 00 00 # mov edx, 1
-5b # pop rbx
-89 1c 25 79 00 40 00 # mov [rw_buffer], rbx
-0f 05 # syscall
-c3 # ret
+50                            # push rax
+b8 01 00 00 00                # mov eax, 1
+bf 01 00 00 00                # mov edi, 1
+be 79 00 40 00                # mov esi, rw_buffer
+ba 01 00 00 00                # mov edx, 1
+5b                            # pop rbx
+89 1c 25 79 00 40 00          # mov [rw_buffer], rbx
+0f 05                         # syscall
+c3                            # ret
 
 # get_hex_digit +36
-e8 3d 00 00 00 # call get_next_char
-3c 23 # cmp al, '#'
-75 0d # jne .check_hex
+e8 3d 00 00 00                # call get_next_char
+3c 23                         # cmp al, '#'
+75 0d                         # jne .check_hex
 # .comment_loop
-e8 34 00 00 00 # call get_next_char
-3c ff # cmp al, 255
-74 11 # je .end
-3c 0a # cmp al, '\n'
-74 f3 # je .comment_loop (-13)
+e8 34 00 00 00                # call get_next_char
+3c ff                         # cmp al, 255
+74 11                         # je .end
+3c 0a                         # cmp al, '\n'
+74 f3                         # je .comment_loop (-13)
 # .check_hex
-3c ff # cmp al, 255
-74 09 # je .end
-e8 05 00 00 00 # call as_hex
-3c ff # cmp al, 255
-74 e6 # je get_hex_digit (-26)
+3c ff                         # cmp al, 255
+74 09                         # je .end
+e8 05 00 00 00                # call as_hex
+3c ff                         # cmp al, 255
+74 e6                         # je get_hex_digit (-26)
 # .end
-c3 # ret
+c3                            # ret
 
 # as_hex +12 -- +30
-3c 30 # cmp al, '0'
-7c 08 # jl .next (+8)
+3c 30                         # cmp al, '0'
+7c 08                         # jl .next (+8)
 
-3c 39 # cmp al, '9'
-7f 04 # jg .next (+4)
+3c 39                         # cmp al, '9'
+7f 04                         # jg .next (+4)
 
-2c 30 # sub al, '0'
-eb 11 # jmp .end (+)
+2c 30                         # sub al, '0'
+eb 11                         # jmp .end (+)
 
 # .next +12
-3c 61 # cmp al, 'a'
-7c 08 # jl .err (+15)
+3c 61                         # cmp al, 'a'
+7c 08                         # jl .err (+15)
 
-3c 66 # cmp al, 'f'
-7f 04 # jg .err (+4)
+3c 66                         # cmp al, 'f'
+7f 04                         # jg .err (+4)
 
-2c 57 # sub al, 0x57 ('a' - 10)
+2c 57                         # sub al, 0x57 ('a' - 10)
 
-eb 05 # jmp .end (+5)
+eb 05                         # jmp .end (+5)
 
 # .err +5
-b8 ff 00 00 00 # mov eax, 255
+b8 ff 00 00 00                # mov eax, 255
 # .end +1
-c3 # ret
+c3                            # ret
 
 # get_next_char +49
-b8 00 00 00 00 # mov eax, 0
-bf 00 00 00 00 # mov edi, 0 
-be 79 00 40 00 # mov esi, rw_buffer
-ba 01 00 00 00 # mov edx, 1
-0f 05 # syscall
+b8 00 00 00 00                # mov eax, 0
+bf 00 00 00 00                # mov edi, 0
+be 79 00 40 00                # mov esi, rw_buffer
+ba 01 00 00 00                # mov edx, 1
+0f 05                         # syscall
 
-3c 00 # cmp al, 0
-74 16 # je .err
+3c 00                         # cmp al, 0
+74 16                         # je .err
 
 48 a1 79 00 40 00 00 00 00 00 # mov rax, [rw_buffer]
 
-3c 41 # cmp al, 'A'
-7c 0d # jl .end
+3c 41                         # cmp al, 'A'
+7c 0d                         # jl .end
 
-3c 5a # cmp al, 'Z'
-7f 09 # jg .end
+3c 5a                         # cmp al, 'Z'
+7f 09                         # jg .end
 
-04 20 # add al, 0x20
-eb 05 # jmp .end
+04 20                         # add al, 0x20
+eb 05                         # jmp .end
 
 # .err +5
-b8 ff 00 00 00 # mov eax, 255
+b8 ff 00 00 00                # mov eax, 255
 # .end +1
-c3 # ret
+c3                            # ret
