@@ -28,3 +28,6 @@
 
 !asm
 !asm/*.asm
+
+!utils
+!utils/*
